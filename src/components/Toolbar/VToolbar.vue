@@ -19,11 +19,12 @@
     </v-navigation-drawer>
 
     <v-app-bar
+      src="https://img3.goodfon.com/wallpaper/nbig/5/d3/material-desing-color-3614.jpg"
       app
       clipped-left
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title class="nunito">ATTENDANCE TRACKING</v-toolbar-title>
+      <v-toolbar-title class="nunito fs_20">ATTENDANCE TRACKING</v-toolbar-title>
     </v-app-bar>
 
   </div>
@@ -62,7 +63,7 @@ export default {
 
 <style>
 .border{
-   background-color: rgb(74, 180, 250);
+   background-color: #61cfe6;
    color: rgb(230, 0, 0);
 }
 </style>
