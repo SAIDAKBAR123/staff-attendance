@@ -1,28 +1,34 @@
 <template>
   <div>
-      <v-container>
-        <v-row>
-          <v-col cols="12">
-            <h2>Requests</h2>
-          </v-col>
-        </v-row>
-        <v-row justify="start">
-          <v-col cols="auto">
-            <transition
-                name="custom-classes-transition"
-                enter-active-class="animated tada"
-                leave-active-class="animated bounceOutRight"
-              >
-            <v-btn v-show="showing" tile color="primary"> Send Request</v-btn>
-            </transition>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn  tile @click="showing = !showing"  color="primary"> Schedule Request</v-btn>
-          </v-col>
-        </v-row>
-        <v-row no-gutters>
-          <v-col>
-             <v-data-table
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <h2>Requests</h2>
+        </v-col>
+      </v-row>
+      <v-row justify="start">
+        <v-col cols="auto">
+          <v-btn tile color="primary" @click="loading2 = !loading2">
+            Send Request
+            <template v-slot:loader>
+              <span>Loading...</span>
+            </template>
+          </v-btn>
+        </v-col>
+        <v-col cols="auto">
+          <v-btn
+            :disabled="snackbar"
+            tile
+            @click="dialog = true"
+            color="primary"
+          >
+            Schedule Request</v-btn
+          >
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col>
+          <v-data-table
             :headers="headers"
             :items="desserts"
             class="elevation-0"
@@ -30,31 +36,86 @@
             <template v-slot:item.time="{ item }">
               <span>{{ item.time | moment("MMM D, YYYY") }}</span>
             </template>
-             <template v-slot:item.times="{ item }">
-               <span>{{ item.time | moment("dddd , LT") }}</span>
+            <template v-slot:item.times="{ item }">
+              <span>{{ item.time | moment("dddd , LT") }}</span>
             </template>
-            <template v-slot:item.isActive="{item}">
+            <template v-slot:item.isActive="{ item }">
               <v-progress-linear
-              :color="item.isActive == 1 ? 'success' : 'grey'"
-              :value="item.responses.length"
-      stream
-      height="20"
-    >
-    {{item.isActive == 1 ? 'On process' : 'finished' }}
-    </v-progress-linear>
+                :color="item.isActive == 1 ? 'success' : 'grey'"
+                :value="item.responses.length"
+                stream
+                height="20"
+              >
+                {{ item.isActive == 1 ? "On process" : "finished" }}
+              </v-progress-linear>
             </template>
           </v-data-table>
+        </v-col>
+      </v-row>
+      <!--dialog box -->
+      <v-dialog v-model="dialog" width="500">
+        <v-card>
+          <v-time-picker
+            full-width
+            v-model="datePick"
+            :landscape="$vuetify.breakpoint.smAndUp"
+            ampm-in-title
+          ></v-time-picker>
+          <v-card-action class="my-2">
+            <v-btn
+              @click="dialog = false"
+              tile
+              x-large
+              block
+              color="success"
+              class="text-center align-self-center pa-2"
+              >START <v-icon size="30" right>mdi-podcast</v-icon></v-btn
+            >
+          </v-card-action>
+        </v-card>
+      </v-dialog>
+      <!--notification --->
+      <v-snackbar v-model="snackbar">
+        <v-row>
+          <v-col>
+            <span>Request is going to be sent!</span>
+            <v-progress-linear
+              indeterminate
+              color="green darken-2"
+            ></v-progress-linear>
           </v-col>
         </v-row>
-      </v-container>
+        <v-btn color="pink" text @click="snackbar = false">
+          Cancel
+        </v-btn>
+      </v-snackbar>
+    </v-container>
   </div>
+  <!-- <transition
+                name="custom-classes-transition"
+                enter-active-class="animated tada"
+                leave-active-class="animated bounceOutRight"
+              > -->
 </template>
 
 <script>
 export default {
+  watch: {
+    loading2 (val) {
+      console.log(val)
+      this.snackbar = true
+      setTimeout(() => {
+        this.snackbar = false
+      }, 3000)
+    }
+  },
   data () {
     return {
+      loading2: null,
+      snackbar: null,
+      datePick: null,
       showing: true,
+      dialog: false,
       headers: [
         {
           text: 'Request Date',
@@ -140,6 +201,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
