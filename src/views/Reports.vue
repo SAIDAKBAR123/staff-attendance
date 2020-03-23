@@ -46,7 +46,7 @@
 
 <script>
 import Get from '../services/Get'
-// import io from 'socket.io-client'
+import io from 'socket.io-client'
 export default {
   methods: {
     getData () {
@@ -106,13 +106,12 @@ export default {
   },
   created () {
     this.getData()
-    // this.socket = io('http://31.135.215.99:8080')
-    // console.log(this.socket)
+    this.socket = io('http://31.135.215.99:8080')
   },
   mounted () {
-    // this.socket.on('newResponse', data => {
-    //   console.log(data)
-    // })
+    this.socket.on('newResponse', data => {
+      this.desserts = console.log(data)
+    })
   }
 }
 </script>
