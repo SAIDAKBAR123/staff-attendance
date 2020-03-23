@@ -2,10 +2,8 @@
   <div class="staff">
       <v-container>
       <v-row>
-        <v-col cols="4" v-for="item in quick" :key="item.name">
-          <v-card :color="item.color" draggable>
-            <v-card-title>{{item.name}}</v-card-title>
-          </v-card>
+        <v-col cols="12">
+          <span class="montserrat-default fs_30">Staff</span>
         </v-col>
       </v-row>
       <v-row>

@@ -3,7 +3,7 @@
     <v-container>
         <v-row>
             <v-col>
-                <h2>Department view</h2>
+                <p class="montserrat-default fs_30">Departments</p>
             </v-col>
         </v-row>
       <v-row>
@@ -51,7 +51,7 @@
              <td>{{ item.id}}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.phoneNumber }}</td>
-          <td><v-btn color="primary" small text> <v-icon left> mdi-telegram</v-icon> call</v-btn></td>
+          <td><v-btn fab color="primary" small text> <v-icon> mdi-telegram</v-icon></v-btn></td>
         </tr>
       </tbody>
     </template>

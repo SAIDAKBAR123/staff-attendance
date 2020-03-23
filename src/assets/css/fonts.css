@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,600,700&display=swap&subset=cyrillic,cyrillic-ext');
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600&display=swap&subset=cyrillic');
+
+.montserrat-default {
+    font-family: 'Montserrat', sans-serif;
+}
 .nunito-sans{
     font-family: 'Nunito Sans', sans-serif;
     font-size: 22px;
@@ -32,6 +37,12 @@ font-size: 20px;
 }
 .fs_28{
     font-size: 28px;
+}
+.fs_30{
+    font-size: 30px;
+}
+.fs_48{
+    font-size: 48px;
 }
 .fs_28_bold{
     font-size: 28px;

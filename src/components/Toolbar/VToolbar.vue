@@ -6,8 +6,8 @@
       app
       clipped
     >
-      <v-list  dense>
-        <v-list-item active-class="border" :to="item.path" link v-for="item in sidebar" :key="item.name">
+      <v-list dense>
+        <v-list-item color="blue darken-1" active-class="border" :to="item.path" link v-for="item in sidebar" :key="item.name">
           <v-list-item-action>
             <v-icon>{{item.icon}}</v-icon>
           </v-list-item-action>
@@ -25,6 +25,8 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title class="nunito fs_20">ATTENDANCE TRACKING</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn color="grey" right text>Leave <v-icon size="30" right>mdi-exit-to-app</v-icon></v-btn>
     </v-app-bar>
 
   </div>
@@ -63,7 +65,8 @@ export default {
 
 <style>
 .border{
-   background-color: #61cfe6;
-   color: rgb(230, 0, 0);
+   border-bottom-color: #61cfe6;;
+   border-left-style:solid;
+   border-left-width: 7px;
 }
 </style>

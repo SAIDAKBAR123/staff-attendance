@@ -2,8 +2,8 @@
   <div>
       <v-container>
         <v-row>
-          <v-col cols="2">
-            <h2>Requests and Reports</h2>
+          <v-col cols="12">
+             <p class="montserrat-default fs_30">Requests and Reports</p>
           </v-col>
             <v-col cols="12">
             <v-btn tile text color="blue" href="http://31.135.215.99:8080/getExcel"><v-icon left>mdi-download</v-icon> get Excel</v-btn>
