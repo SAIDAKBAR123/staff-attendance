@@ -150,6 +150,7 @@
              <th class="text-left">Order</th>
           <th class="text-left">Name</th>
           <th class="text-left">Contacts</th>
+          <th class="text-left">Actual Address</th>
           <th class="text-left">Action</th>
         </tr>
       </thead>
@@ -158,6 +159,8 @@
              <td>{{ i+1}}</td>
           <td>{{ item.staff.name }}</td>
           <td>{{ item.staff.phoneNumber }}</td>
+          <td>{{ item.addressString }}</td>
+          <td>  <v-chip small :color="item.isInside ==1 ? 'green lighten-2' : 'red lighten-2'" dark>{{ item.isInside == 1 ? 'In' : 'Out' }}</v-chip></td>
           <td><v-btn fab color="primary" small text> <v-icon> mdi-telegram</v-icon></v-btn></td>
         </tr>
       </tbody>
