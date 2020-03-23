@@ -74,8 +74,15 @@
 </template>
 
 <script>
+import Get from '../services/Get'
 export default {
   methods: {
+    getData () {
+      Get.getDepartments().then(data => {
+        console.log(data)
+        this.desserts = data
+      }).catch(error => console.log(error))
+    },
     dialogOpen (item) {
       this.staffList = item
       this.dialog = true
@@ -97,95 +104,6 @@ export default {
         { text: 'Action', value: 'staffs' }
       ],
       desserts: [
-        {
-          id: 1,
-          name: 'IT Department',
-          createdAt: '2020-03-20T10:29:43.000Z',
-          updatedAt: '2020-03-20T10:29:43.000Z',
-          staffs: [
-            {
-              id: 1,
-              name: 'Azamat Abdullaev',
-              chatId: null,
-              phoneNumber: '+998909272970',
-              departmentId: 1,
-              createdAt: '2020-03-20T10:29:43.000Z',
-              updatedAt: '2020-03-20T10:29:43.000Z'
-            },
-            {
-              id: 2,
-              name: 'Inadullaev Mahmudjon',
-              chatId: null,
-              phoneNumber: '+998994287668',
-              departmentId: 1,
-              createdAt: '2020-03-20T10:29:43.000Z',
-              updatedAt: '2020-03-20T10:29:43.000Z'
-            },
-            {
-              id: 3,
-              name: 'Zafar Davlatov',
-              chatId: 782190450,
-              phoneNumber: '+998909647853',
-              departmentId: 1,
-              createdAt: '2020-03-20T10:29:43.000Z',
-              updatedAt: '2020-03-20T10:42:59.000Z'
-            },
-            {
-              id: 4,
-              name: 'Saidakbar Mahmudhujaev',
-              chatId: null,
-              phoneNumber: '+998998005598',
-              departmentId: 1,
-              createdAt: '2020-03-20T10:29:43.000Z',
-              updatedAt: '2020-03-20T10:29:43.000Z'
-            },
-            {
-              id: 5,
-              name: 'Laziz Abdullaev',
-              chatId: null,
-              phoneNumber: '+998909792977',
-              departmentId: 1,
-              createdAt: '2020-03-20T10:29:43.000Z',
-              updatedAt: '2020-03-20T10:29:43.000Z'
-            },
-            {
-              id: 6,
-              name: 'Тимур Самиев',
-              chatId: null,
-              phoneNumber: '+998974235157',
-              departmentId: 1,
-              createdAt: '2020-03-20T10:29:43.000Z',
-              updatedAt: '2020-03-20T10:29:43.000Z'
-            },
-            {
-              id: 7,
-              name: 'Канат Сембиев',
-              chatId: null,
-              phoneNumber: '+998903521008',
-              departmentId: 1,
-              createdAt: '2020-03-20T10:29:43.000Z',
-              updatedAt: '2020-03-20T10:29:43.000Z'
-            },
-            {
-              id: 8,
-              name: 'Тимур Яковлев',
-              chatId: null,
-              phoneNumber: '+998903581582',
-              departmentId: 1,
-              createdAt: '2020-03-20T10:29:43.000Z',
-              updatedAt: '2020-03-20T10:29:43.000Z'
-            },
-            {
-              id: 9,
-              name: 'Тимур Эрназаров',
-              chatId: null,
-              phoneNumber: '+998946854928',
-              departmentId: 1,
-              createdAt: '2020-03-20T10:29:43.000Z',
-              updatedAt: '2020-03-20T10:29:43.000Z'
-            }
-          ]
-        },
         {
           id: 2,
           name: 'Library',
@@ -240,6 +158,9 @@ export default {
         }
       ]
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

@@ -75,10 +75,10 @@
             class="elevation-0"
           >
             <template v-slot:item.time="{ item }">
-              <span>{{ item.time | moment("MMM D, YYYY") }}</span>
+              <span>{{ item.startTime | moment("MMM D, YYYY") }}</span>
             </template>
             <template v-slot:item.times="{ item }">
-              <span>{{ item.time | moment("dddd , LT") }}</span>
+              <span>{{ item.endTime | moment("dddd , LT") }}</span>
             </template>
             <template v-slot:item.isActive="{ item }">
               <v-progress-linear
@@ -159,7 +159,7 @@
              <td>{{ i+1}}</td>
           <td>{{ item.staff.name }}</td>
           <td>{{ item.staff.phoneNumber }}</td>
-          <td>{{ item.addressString }}</td>
+          <td>{{ item.actualLocation }}</td>
           <td>  <v-chip small :color="item.isInside ==1 ? 'green lighten-2' : 'red lighten-2'" dark>{{ item.isInside == 1 ? 'In' : 'Out' }}</v-chip></td>
           <td><v-btn fab color="primary" small text> <v-icon> mdi-telegram</v-icon></v-btn></td>
         </tr>
@@ -190,6 +190,7 @@
 </template>
 
 <script>
+import Get from '../services/Get'
 export default {
   watch: {
     loading2 (val) {
@@ -201,6 +202,12 @@ export default {
     }
   },
   methods: {
+    getData () {
+      Get.getRequests().then(data => {
+        console.log(data)
+        this.desserts = data
+      }).catch(error => console.log(error))
+    },
     dialogOpen (item) {
       this.hasUsersList = true
       this.userList = item
@@ -297,6 +304,9 @@ export default {
         }
       ]
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

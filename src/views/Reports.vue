@@ -45,12 +45,15 @@
 </template>
 
 <script>
+import Get from '../services/Get'
+
 export default {
   methods: {
-    getDate (dateString) {
-      const date = new Date(dateString)
-      console.log(date.getHours() + ':' + date.getMinutes())
-      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+    getData () {
+      Get.getResponse().then(data => {
+        console.log(data)
+        this.desserts = data
+      }).catch(error => console.log(error))
     }
   },
   data () {
@@ -66,7 +69,7 @@ export default {
         { text: 'Attendance', value: 'isInside' },
         { text: 'Log Date', value: 'time' },
         { text: 'Log Time', value: 'times' },
-        { text: 'Actual Location', value: 'addressString' },
+        { text: 'Actual Location', value: 'actualLocation' },
         { text: 'Action', value: 'telegram' }
       ],
       desserts: [
@@ -97,37 +100,12 @@ export default {
             createdAt: '2020-03-20T10:29:43.000Z',
             updatedAt: '2020-03-20T10:42:59.000Z'
           }
-        },
-        {
-          id: 2,
-          staffId: 3,
-          requestId: 1,
-          isInside: 1,
-          latitude: '41.323655',
-          longitude: '69.309885',
-          addressString: 'Узбекистан, Ташкент, 1-й проезд Корабулок, 31',
-          time: '2020-03-20T13:28:32.000Z',
-          createdAt: '2020-03-20T13:28:32.000Z',
-          updatedAt: '2020-03-20T13:28:32.000Z',
-          request: {
-            id: 1,
-            time: '2020-03-20T10:43:11.000Z',
-            isActive: 1,
-            createdAt: '2020-03-20T10:43:11.000Z',
-            updatedAt: '2020-03-20T10:43:11.000Z'
-          },
-          staff: {
-            id: 3,
-            name: 'Zafar Davlatov',
-            chatId: 782190450,
-            phoneNumber: '+998909647853',
-            departmentId: 1,
-            createdAt: '2020-03-20T10:29:43.000Z',
-            updatedAt: '2020-03-20T10:42:59.000Z'
-          }
         }
       ]
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>
