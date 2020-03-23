@@ -46,18 +46,18 @@
 
 <script>
 import Get from '../services/Get'
-
+// import io from 'socket.io-client'
 export default {
   methods: {
     getData () {
       Get.getResponse().then(data => {
-        console.log(data)
         this.desserts = data
       }).catch(error => console.log(error))
     }
   },
   data () {
     return {
+      socket: {},
       headers: [
         {
           text: 'Name',
@@ -106,6 +106,13 @@ export default {
   },
   created () {
     this.getData()
+    // this.socket = io('http://31.135.215.99:8080')
+    // console.log(this.socket)
+  },
+  mounted () {
+    // this.socket.on('newResponse', data => {
+    //   console.log(data)
+    // })
   }
 }
 </script>

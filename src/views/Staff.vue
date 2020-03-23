@@ -36,23 +36,6 @@ export default {
   name: 'Home',
   data () {
     return {
-      quick: [
-        {
-          name: 'Total Staff members',
-          count: '23',
-          color: this.getColors()
-        },
-        {
-          name: 'Total Staff members',
-          count: '23',
-          color: this.getColors()
-        },
-        {
-          name: 'Total Staff members',
-          count: '23',
-          color: this.getColors()
-        }
-      ],
       headers: [
         {
           text: 'Name',
@@ -75,91 +58,13 @@ export default {
           position: 'Bugalter',
           attendance: 1,
           telegram: '@studnet'
-        },
-        {
-          name: 'Alieva Sevara',
-          visit: 'Sep 03, 2020',
-          img: 'https://www.ishn.com/ext/resources/900x550/older-worker-mature-senior-900.jpg?1554230646',
-          gender: 'Female',
-          position: 'cleaner',
-          attendance: 0,
-          telegram: '@studnet'
-        },
-        {
-          name: 'Alieva Sevara',
-          visit: 'Sep 03, 2020',
-          img: 'https://www.keyholetech.co.uk/wp-content/uploads/2018/03/welfare.png',
-          gender: 'Female',
-          position: 'cleaner',
-          attendance: 1,
-          telegram: '@studnet'
-        },
-        {
-          name: 'Alieva Sevara',
-          visit: 'Sep 03, 2020',
-          gender: 'Female',
-          img: 'https://www.keyholetech.co.uk/wp-content/uploads/2018/03/welfare.png',
-          position: 'cleaner',
-          attendance: 1,
-          telegram: '@studnet'
-        },
-        {
-          name: 'Alieva Sevara',
-          visit: 'Sep 03, 2020',
-          gender: 'Female',
-          img: 'https://www.keyholetech.co.uk/wp-content/uploads/2018/03/welfare.png',
-          position: 'cleaner',
-          attendance: 0,
-          telegram: '@studnet'
-        },
-        {
-          name: 'Alieva Sevara',
-          visit: 'Sep 03, 2020',
-          gender: 'Female',
-          img: 'https://www.keyholetech.co.uk/wp-content/uploads/2018/03/welfare.png',
-          position: 'cleaner',
-          attendance: 1,
-          telegram: '@studnet'
-        },
-        {
-          name: 'Alieva Sevara',
-          visit: 'Sep 03, 2020',
-          gender: 'Female',
-          position: 'cleaner',
-          attendance: 1,
-          img: 'https://www.keyholetech.co.uk/wp-content/uploads/2018/03/welfare.png',
-          telegram: '@studnet'
-        },
-        {
-          name: 'Alieva Sevara',
-          visit: 'Sep 03, 2020',
-          gender: 'Female',
-          img: 'https://www.keyholetech.co.uk/wp-content/uploads/2018/03/welfare.png',
-          position: 'cleaner',
-          attendance: 0,
-          telegram: '@studnet'
-        },
-        {
-          name: 'Alieva Sevara',
-          visit: 'Sep 03, 2020',
-          gender: 'Female',
-          img: 'https://www.keyholetech.co.uk/wp-content/uploads/2018/03/welfare.png',
-          position: 'cleaner',
-          attendance: 1,
-          telegram: '@studnet'
         }
 
       ]
     }
   },
   methods: {
-    getColors () {
-      const num1 = Math.floor(Math.random() * 1000)
-      const num2 = Math.floor(Math.random() * 1000)
-      const num3 = Math.floor(Math.random() * 1000)
-      const color = `rgb(${num1}, ${num2} , ${num3})`
-      return color
-    },
+
     getColor (calories) {
       const num = Math.floor(Math.random() * 1000)
 
@@ -167,7 +72,6 @@ export default {
       this.$vuetify.theme.dark = true
       if (calories > 400) return 'red'
       else if (calories > 200) return 'orange'
-      else return this.getColors()
     }
   }
 }

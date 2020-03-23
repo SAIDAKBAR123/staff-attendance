@@ -5,5 +5,5 @@ export default {
   getStaff: () => execute(API().get('staff')),
   getDepartments: () => execute(API().get('departments')),
   getRequests: () => execute(API().get('requests')),
-  getExcel: (id) => execute(API().get(`${id}/getExcel`))
+  getExcel: (id) => execute(API().get(`requests/${id}/getExcel`))
 }

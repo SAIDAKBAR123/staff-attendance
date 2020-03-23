@@ -7,12 +7,9 @@
         </v-col>
       </v-row>
       <v-row justify="start">
-        <v-col cols="auto">
-          <v-btn tile color="primary" @click="loading2 = !loading2">
-            Send Request
-            <template v-slot:loader>
-              <span>Loading...</span>
-            </template>
+        <v-col v-if="false" cols="auto">
+          <v-btn tile color="primary">
+            Schedule Request
           </v-btn>
         </v-col>
         <v-col cols="auto">
@@ -22,7 +19,7 @@
             @click="dialog = true"
             color="primary"
           >
-            Schedule Request</v-btn
+            Send Request</v-btn
           >
         </v-col>
         <v-col cols="12">
@@ -108,7 +105,8 @@
           ></v-time-picker>
           <v-card-action class="my-2">
             <v-btn
-              @click="dialog = false"
+            :disabled="datePick == null"
+              @click="sendRequest"
               tile
               x-large
               block
@@ -177,6 +175,13 @@
           >
             close
           </v-btn>
+            <v-btn
+            color="primary"
+            text
+            :href="`${base}requests/${userList.id}/getExcel`"
+          >
+          excel
+          </v-btn>
         </v-card-actions>
       </v-card>
       </v-dialog>
@@ -191,10 +196,10 @@
 
 <script>
 import Get from '../services/Get'
+import Post from '../services/Post'
 export default {
   watch: {
     loading2 (val) {
-      console.log(val)
       this.snackbar = true
       setTimeout(() => {
         this.snackbar = false
@@ -202,20 +207,29 @@ export default {
     }
   },
   methods: {
+    sendRequest () {
+      const now = new Date()
+      const hours = this.datePick.split(':')[0]
+      const minutes = this.datePick.split(':')[1]
+      const timestamps = (new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0)).getTime()
+      console.log(timestamps)
+      Post.sentRequest({ endTime: timestamps }).then(res => {
+        console.log(res)
+      }).catch(error => console.log(error))
+    },
     getData () {
       Get.getRequests().then(data => {
-        console.log(data)
         this.desserts = data
       }).catch(error => console.log(error))
     },
     dialogOpen (item) {
       this.hasUsersList = true
       this.userList = item
-      console.log(item)
     }
   },
   data () {
     return {
+      base: null,
       userList: [],
       hasUsersList: false,
       loading2: null,
@@ -262,51 +276,17 @@ export default {
                 createdAt: '2020-03-20T10:29:43.000Z',
                 updatedAt: '2020-03-20T10:42:59.000Z'
               }
-            },
-            {
-              id: 2,
-              staffId: 3,
-              requestId: 1,
-              isInside: 0,
-              latitude: '41.323655',
-              longitude: '69.309885',
-              addressString: 'Узбекистан, Ташкент, 1-й проезд Корабулок, 31',
-              time: '2020-03-20T13:28:32.000Z',
-              createdAt: '2020-03-20T13:28:32.000Z',
-              updatedAt: '2020-03-20T13:28:32.000Z',
-              staff: {
-                id: 3,
-                name: 'Zafar Davlatov',
-                chatId: 782190450,
-                phoneNumber: '+998909647853',
-                departmentId: 1,
-                createdAt: '2020-03-20T10:29:43.000Z',
-                updatedAt: '2020-03-20T10:42:59.000Z'
-              }
             }
           ]
-        },
-        {
-          id: 2,
-          time: '2020-03-20T10:48:03.000Z',
-          isActive: 0,
-          createdAt: '2020-03-20T10:48:03.000Z',
-          updatedAt: '2020-03-20T10:48:03.000Z',
-          responses: []
-        },
-        {
-          id: 3,
-          time: '2020-03-20T11:01:51.000Z',
-          isActive: 1,
-          createdAt: '2020-03-20T11:01:51.000Z',
-          updatedAt: '2020-03-20T11:01:51.000Z',
-          responses: []
         }
       ]
     }
   },
   created () {
     this.getData()
+  },
+  mounted () {
+    this.base = process.env.VUE_APP_BASE_URL
   }
 }
 </script>
