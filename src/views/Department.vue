@@ -7,9 +7,8 @@
             </v-col>
         </v-row>
       <v-row>
-        <v-col >
+        <v-col  v-if="desserts.length > 0">
           <v-data-table
-          v-if="desserts.length > 0"
             :headers="headers"
             :items="desserts"
             class="elevation-0 animated fadeIn"
@@ -22,6 +21,9 @@
                 ><v-icon size="20" left>mdi-eye</v-icon> view</v-btn>
             </template>
           </v-data-table>
+        </v-col>
+        <v-col v-else>
+            <loading />
         </v-col>
       </v-row>
     </v-container>

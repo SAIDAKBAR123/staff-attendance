@@ -22,7 +22,7 @@
             Send Request</v-btn
           >
         </v-col>
-        <v-col cols="12">
+        <v-col v-if="false" cols="12">
           <transition
             name="custom-classes-transition"
             enter-active-class="animated fadeInLeftBig"
@@ -30,8 +30,8 @@
           >
             <v-alert
               v-if="dialog.reqIsOn"
-              color="green"
-              dark
+              outlined
+              color="deep-orange"
               dense
               icon="mdi-clock-fast"
               prominent
@@ -44,10 +44,9 @@
                 <v-col class="shrink">
                   <v-btn
                     dark
-                    outlined
                     @click="stopAttendance"
                     tile
-                    color="white"
+                    color="red lighten-1"
                     >STOP</v-btn
                   >
                 </v-col>
@@ -56,7 +55,7 @@
                 <v-col cols="12">
                   <v-progress-linear
                     indeterminate
-                    color="white"
+                    color="deep-orange"
                   ></v-progress-linear>
                 </v-col>
               </v-row>
@@ -93,6 +92,9 @@
                 ><v-icon size="20" left>mdi-eye</v-icon> view</v-btn>
             </template>
           </v-data-table>
+        </v-col>
+        <v-col v-else>
+          <loading />
         </v-col>
       </v-row>
       <!--dialog box -->
@@ -142,6 +144,7 @@ export default {
     },
     getData () {
       Get.getRequests().then(data => {
+        console.log(data)
         this.desserts = data
       }).catch(error => console.log(error))
     },

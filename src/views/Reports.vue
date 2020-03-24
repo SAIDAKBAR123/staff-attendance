@@ -7,7 +7,6 @@
           </v-col>
             <v-col v-if="desserts.length > 0" cols="12">
             <v-btn tile text color="blue" href="http://31.135.215.99:8080/getExcel"><v-icon left>mdi-download</v-icon> get Excel</v-btn>
-            <v-btn @click="notify">notify</v-btn>
           </v-col>
         </v-row>
         <v-row v-if="desserts.length > 0" no-gutters>
@@ -40,20 +39,9 @@
             </template>
           </v-data-table>
           </v-col>
-          <v-snackbar
-          color="success"
-      v-model="snackbar"
-      :timeout="1000"
-    >
-      {{ obj.staff.name }}
-      <v-btn
-        color="pink"
-        text
-        @click="snackbar = false"
-      >
-        Close
-      </v-btn>
-    </v-snackbar>
+        </v-row>
+        <v-row v-else>
+          <loading />
         </v-row>
       </v-container>
   </div>
@@ -85,6 +73,7 @@ export default {
   },
   data () {
     return {
+      base: process.env.socPath,
       snackbar: false,
       obj: {
         staff: {
@@ -111,21 +100,21 @@ export default {
     }
   },
   created () {
+    // const base = process.env.socPath
+    // console.log(base)
     this.getData()
-    this.socket = io(`${process.env.socPath}`)
+    this.socket = io('https://iutattendance.herokuapp.com')
   },
   mounted () {
     this.socket.on('newResponse', data => {
       // this.desserts = console.log(data)
-      this.snackbar = true
       this.obj = data
       this.desserts.unshift(data)
       this.$notify({
         classes: 'my-type',
         type: 'success',
         group: 'foo',
-        title: data.staff.name,
-        text: `<p class="headline">${data.staff.actualLocation}</p>`
+        title: data.staff.name
       })
     })
   }
