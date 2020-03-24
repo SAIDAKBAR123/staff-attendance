@@ -112,7 +112,7 @@ export default {
   },
   created () {
     this.getData()
-    this.socket = io('https://iutattendance.herokuapp.com')
+    this.socket = io(`${process.env.socPath}`)
   },
   mounted () {
     this.socket.on('newResponse', data => {
