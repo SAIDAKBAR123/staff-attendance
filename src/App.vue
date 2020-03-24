@@ -8,7 +8,7 @@
           </transition>
         <v-toolbar/>
       </v-container>
-
+    <notifications classes="vue-notification" position="bottom right" group="foo" />
     </v-content>
   </v-app>
 </template>
@@ -30,7 +30,8 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+
 .slide-enter-active{
 animation: slide-in 400ms ease-out forwards;
 }

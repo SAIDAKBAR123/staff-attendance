@@ -1,20 +1,21 @@
 <template>
   <div>
       <v-container>
-        <v-row>
+        <v-row >
           <v-col cols="12">
              <p class="montserrat-default fs_30">Requests and Reports</p>
           </v-col>
-            <v-col cols="12">
+            <v-col v-if="desserts.length > 0" cols="12">
             <v-btn tile text color="blue" href="http://31.135.215.99:8080/getExcel"><v-icon left>mdi-download</v-icon> get Excel</v-btn>
+            <v-btn @click="notify">notify</v-btn>
           </v-col>
         </v-row>
-        <v-row no-gutters>
+        <v-row v-if="desserts.length > 0" no-gutters>
           <v-col>
              <v-data-table
             :headers="headers"
             :items="desserts"
-            class="elevation-0"
+            class="elevation-0 animated fadeIn"
           >
             <template v-slot:item.name="{ item }">
               <v-avatar class="mr-2" size="40"
@@ -39,6 +40,20 @@
             </template>
           </v-data-table>
           </v-col>
+          <v-snackbar
+          color="success"
+      v-model="snackbar"
+      :timeout="1000"
+    >
+      {{ obj.staff.name }}
+      <v-btn
+        color="pink"
+        text
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
         </v-row>
       </v-container>
   </div>
@@ -49,15 +64,36 @@ import Get from '../services/Get'
 import io from 'socket.io-client'
 export default {
   methods: {
+    notify () {
+      this.$notify({
+        classes: 'my-type',
+        type: 'success',
+        group: 'foo',
+        title: 'Azamat Abdullaev',
+        text: '<strong class=" nunito-sans-default">has been shared his status</strong>'
+      })
+    },
     getData () {
       Get.getResponse().then(data => {
         this.desserts = data
+        console.log(data)
+        this.dummy = data[0]
       }).catch(error => console.log(error))
+    },
+    addNew () {
+      this.desserts.unshift(this.dummy)
     }
   },
   data () {
     return {
+      snackbar: false,
+      obj: {
+        staff: {
+          name: ''
+        }
+      },
       socket: {},
+      dummy: '',
       headers: [
         {
           text: 'Name',
@@ -67,50 +103,24 @@ export default {
         },
         { text: 'Mobile number', value: 'staff.phoneNumber' },
         { text: 'Attendance', value: 'isInside' },
-        { text: 'Log Date', value: 'time' },
-        { text: 'Log Time', value: 'times' },
+        { text: 'Date', value: 'time' },
+        { text: 'Time', value: 'times' },
         { text: 'Actual Location', value: 'actualLocation' },
         { text: 'Action', value: 'telegram' }
       ],
-      desserts: [
-        {
-          id: 1,
-          staffId: 3,
-          requestId: 1,
-          isInside: 0,
-          latitude: '41.323634',
-          longitude: '69.309896',
-          addressString: 'Узбекистан, Ташкент, 1-й проезд Корабулок, 31',
-          time: '2020-03-20T10:43:19.000Z',
-          createdAt: '2020-03-20T10:43:19.000Z',
-          updatedAt: '2020-03-20T10:43:19.000Z',
-          request: {
-            id: 1,
-            time: '2020-03-20T10:43:11.000Z',
-            isActive: 1,
-            createdAt: '2020-03-20T10:43:11.000Z',
-            updatedAt: '2020-03-20T10:43:11.000Z'
-          },
-          staff: {
-            id: 3,
-            name: 'Zafar Davlatov',
-            chatId: 782190450,
-            phoneNumber: '+998909647853',
-            departmentId: 1,
-            createdAt: '2020-03-20T10:29:43.000Z',
-            updatedAt: '2020-03-20T10:42:59.000Z'
-          }
-        }
-      ]
+      desserts: []
     }
   },
   created () {
     this.getData()
-    this.socket = io('http://31.135.215.99:8080')
+    this.socket = io('http://iutattendance.herokuapp.com')
   },
   mounted () {
     this.socket.on('newResponse', data => {
-      this.desserts = console.log(data)
+      // this.desserts = console.log(data)
+      this.snackbar = true
+      this.obj = data
+      this.desserts.unshift(data)
     })
   }
 }

@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import '@/assets/css/fonts.css'
+import Notifications from 'vue-notification'
+
+Vue.use(Notifications)
 Vue.use(require('vue-moment'))
 Vue.config.productionTip = false
 

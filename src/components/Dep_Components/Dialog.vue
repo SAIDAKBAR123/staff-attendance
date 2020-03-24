@@ -62,7 +62,7 @@ export default {
     }
   },
   created () {
-    console.log(this.staffList)
+    // console.log(this.staffList)
   }
 
 }

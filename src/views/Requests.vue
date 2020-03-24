@@ -14,9 +14,8 @@
         </v-col>
         <v-col cols="auto">
           <v-btn
-            :disabled="snackbar"
             tile
-            @click="dialog = true"
+            @click="openReqDialog"
             color="primary"
           >
             Send Request</v-btn
@@ -65,7 +64,7 @@
         </v-col>
       </v-row>
       <v-row no-gutters>
-        <v-col>
+        <v-col  v-if="desserts.length > 0">
           <v-data-table
             :headers="headers"
             :items="desserts"
@@ -78,14 +77,15 @@
               <span>{{ item.endTime | moment("dddd , LT") }}</span>
             </template>
             <template v-slot:item.isActive="{ item }">
-              <v-progress-linear
+              <!-- <v-progress-linear
                 :color="item.isActive == 1 ? 'success' : 'grey'"
                 :value="item.responses.length"
                 stream
                 height="20"
               >
                 {{ item.isActive == 1 ? "On process" : "finished" }}
-              </v-progress-linear>
+              </v-progress-linear> -->
+              <v-chip  :color="item.isActive == 1 ? 'success' : 'orange lighten-4'">{{ item.isActive == 1 ? "On process" : "finished" }}</v-chip>
             </template>
                  <template v-slot:item.responses="{item}">
               <v-btn @click="dialogOpen(item)" rounded color="primary" outlined dark
@@ -95,96 +95,10 @@
         </v-col>
       </v-row>
       <!--dialog box -->
-      <v-dialog v-model="dialog" width="500">
-        <v-card>
-          <v-time-picker
-            full-width
-            v-model="datePick"
-            :landscape="$vuetify.breakpoint.smAndUp"
-            ampm-in-title
-          ></v-time-picker>
-          <v-card-action class="my-2">
-            <v-btn
-            :disabled="datePick == null"
-              @click="sendRequest"
-              tile
-              x-large
-              block
-              color="success"
-              class="text-center align-self-center pa-2"
-              >START <v-icon size="30" right>mdi-podcast</v-icon></v-btn
-            >
-          </v-card-action>
-        </v-card>
-      </v-dialog>
-      <!--notification --->
-      <v-snackbar v-model="snackbar" right>
-        <v-row>
-          <v-col>
-            <span>Request is going to be sent!</span>
-            <v-progress-linear
-              indeterminate
-              color="green darken-2"
-            ></v-progress-linear>
-          </v-col>
-        </v-row>
-        <v-btn color="pink" text @click="snackbar = false">
-          Cancel
-        </v-btn>
-      </v-snackbar>
-      <!-- dialog for userlist -->
-       <v-dialog v-model="hasUsersList" width="700">
-          <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-         {{userList.time | moment("MMMM, Do YYYY")}}
-        </v-card-title>
-                 <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-             <th class="text-left">Order</th>
-          <th class="text-left">Name</th>
-          <th class="text-left">Contacts</th>
-          <th class="text-left">Actual Address</th>
-          <th class="text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody v-if="userList.responses.length>0">
-        <tr v-for="(item,i) in userList.responses" :key="item.name">
-             <td>{{ i+1}}</td>
-          <td>{{ item.staff.name }}</td>
-          <td>{{ item.staff.phoneNumber }}</td>
-          <td>{{ item.actualLocation }}</td>
-          <td>  <v-chip small :color="item.isInside ==1 ? 'green lighten-2' : 'red lighten-2'" dark>{{ item.isInside == 1 ? 'In' : 'Out' }}</v-chip></td>
-          <td><v-btn fab color="primary" small text> <v-icon> mdi-telegram</v-icon></v-btn></td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
-        <v-divider></v-divider>
+        <send-request-dialog :dialog="dialog"  />
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false"
-          >
-            close
-          </v-btn>
-            <v-btn
-            color="primary"
-            text
-            :href="`${base}requests/${userList.id}/getExcel`"
-          >
-          excel
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-      </v-dialog>
+      <!-- dialog for userlist -->
+     <response-users-dialog :userList="userList" />
     </v-container>
   </div>
   <!-- <transition
@@ -196,47 +110,47 @@
 
 <script>
 import Get from '../services/Get'
-import Post from '../services/Post'
+import SendRequestDialog from '../components/Req_Components/SendRequestDialog'
+import ResponseUsersDialog from '../components/Req_Components/ResonseUsersDialog'
 export default {
+  components: {
+    SendRequestDialog,
+    ResponseUsersDialog
+  },
   watch: {
-    loading2 (val) {
-      this.snackbar = true
-      setTimeout(() => {
-        this.snackbar = false
-      }, 3000)
-    }
+    // loading2 (val) {
+    //   this.snackbar = true
+    //   setTimeout(() => {
+    //     this.snackbar = false
+    //   }, 3000)
+    // }
   },
   methods: {
-    sendRequest () {
-      const now = new Date()
-      const hours = this.datePick.split(':')[0]
-      const minutes = this.datePick.split(':')[1]
-      const timestamps = (new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0)).getTime()
-      console.log(timestamps)
-      Post.sentRequest({ endTime: timestamps }).then(res => {
-        console.log(res)
-      }).catch(error => console.log(error))
-    },
     getData () {
       Get.getRequests().then(data => {
         this.desserts = data
       }).catch(error => console.log(error))
     },
     dialogOpen (item) {
-      this.hasUsersList = true
-      this.userList = item
+      this.userList = {
+        case: true,
+        userList: item
+      }
+    },
+    openReqDialog () {
+      this.dialog.dialog = true
     }
   },
   data () {
     return {
       base: null,
-      userList: [],
-      hasUsersList: false,
+      userList: {
+        case: false,
+        userList: []
+      },
       loading2: null,
-      snackbar: null,
-      datePick: null,
       showing: true,
-      dialog: false,
+      dialog: { dialog: false },
       headers: [
         {
           text: 'Request Date',
@@ -248,38 +162,7 @@ export default {
         { text: 'Status', value: 'isActive' },
         { text: 'View', value: 'responses' }
       ],
-      desserts: [
-        {
-          id: 1,
-          time: '2020-03-20T10:43:11.000Z',
-          isActive: 1,
-          createdAt: '2020-03-20T10:43:11.000Z',
-          updatedAt: '2020-03-20T10:43:11.000Z',
-          responses: [
-            {
-              id: 1,
-              staffId: 3,
-              requestId: 1,
-              isInside: 0,
-              latitude: '41.323634',
-              longitude: '69.309896',
-              addressString: 'Узбекистан, Ташкент, 1-й проезд Корабулок, 31',
-              time: '2020-03-20T10:43:19.000Z',
-              createdAt: '2020-03-20T10:43:19.000Z',
-              updatedAt: '2020-03-20T10:43:19.000Z',
-              staff: {
-                id: 3,
-                name: 'Zafar Davlatov',
-                chatId: 782190450,
-                phoneNumber: '+998909647853',
-                departmentId: 1,
-                createdAt: '2020-03-20T10:29:43.000Z',
-                updatedAt: '2020-03-20T10:42:59.000Z'
-              }
-            }
-          ]
-        }
-      ]
+      desserts: []
     }
   },
   created () {
