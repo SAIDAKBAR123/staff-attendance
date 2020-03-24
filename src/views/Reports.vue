@@ -76,7 +76,6 @@ export default {
     getData () {
       Get.getResponse().then(data => {
         this.desserts = data
-        console.log(data)
         this.dummy = data[0]
       }).catch(error => console.log(error))
     },
@@ -113,7 +112,7 @@ export default {
   },
   created () {
     this.getData()
-    this.socket = io('http://iutattendance.herokuapp.com')
+    this.socket = io('https://iutattendance.herokuapp.com')
   },
   mounted () {
     this.socket.on('newResponse', data => {
@@ -121,6 +120,13 @@ export default {
       this.snackbar = true
       this.obj = data
       this.desserts.unshift(data)
+      this.$notify({
+        classes: 'my-type',
+        type: 'success',
+        group: 'foo',
+        title: data.staff.name,
+        text: `<p class="headline">${data.staff.actualLocation}</p>`
+      })
     })
   }
 }

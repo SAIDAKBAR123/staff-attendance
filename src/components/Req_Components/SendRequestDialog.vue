@@ -3,6 +3,8 @@
         <v-dialog v-model="dialog.dialog" width="500">
         <v-card>
           <v-time-picker
+          format="24hr"
+            :min="minHours"
             full-width
             v-model="datePick"
             :landscape="$vuetify.breakpoint.smAndUp"
@@ -56,6 +58,14 @@ export default {
       datePick: null
     }
   },
+  computed: {
+    minHours () {
+      const time = new Date()
+      const ap = time.getHours() + ':' + time.getMinutes()
+      console.log(ap)
+      return ap
+    }
+  },
   methods: {
     sendRequest () {
       const now = new Date()
@@ -66,6 +76,15 @@ export default {
       Post.sentRequest({ endTime: timestamps }).then(res => {
         console.log(res)
         this.dialog.dialog = false
+        this.dialog.reqIsOn = true
+        this.dialog.reqId = res.id
+        this.$notify({
+          classes: 'my-type',
+          type: 'success',
+          group: 'foo',
+          title: `Time has been set to ${hours} ${minutes}`,
+          text: '<p class="nunito">process has been successfully finished</p>'
+        })
       }).catch(error => console.log(error))
     }
   }

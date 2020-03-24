@@ -15,6 +15,7 @@
         <v-col cols="auto">
           <v-btn
             tile
+            :disabled="this.dialog.reqIsOn"
             @click="openReqDialog"
             color="primary"
           >
@@ -28,7 +29,7 @@
             leave-active-class="animated bounceOutRight"
           >
             <v-alert
-              v-if="loading2"
+              v-if="dialog.reqIsOn"
               color="green"
               dark
               dense
@@ -44,7 +45,7 @@
                   <v-btn
                     dark
                     outlined
-                    @click="loading2 = false"
+                    @click="stopAttendance"
                     tile
                     color="white"
                     >STOP</v-btn
@@ -68,7 +69,7 @@
           <v-data-table
             :headers="headers"
             :items="desserts"
-            class="elevation-0"
+            class="elevation-0 animated fadeIn"
           >
             <template v-slot:item.time="{ item }">
               <span>{{ item.startTime | moment("MMM D, YYYY") }}</span>
@@ -112,6 +113,7 @@
 import Get from '../services/Get'
 import SendRequestDialog from '../components/Req_Components/SendRequestDialog'
 import ResponseUsersDialog from '../components/Req_Components/ResonseUsersDialog'
+import Delete from '../services/Delete'
 export default {
   components: {
     SendRequestDialog,
@@ -126,6 +128,18 @@ export default {
     // }
   },
   methods: {
+    stopAttendance  () {
+      console.log(this.dialog)
+      Delete.deleteReq(this.dialog.reqId).then(res => {
+        console.log(res)
+        this.dialog.reqIsOn = false
+        this.$notify({
+          type: 'warn',
+          text: 'Successfully cancelled',
+          title: res
+        })
+      })
+    },
     getData () {
       Get.getRequests().then(data => {
         this.desserts = data
@@ -148,9 +162,15 @@ export default {
         case: false,
         userList: []
       },
-      loading2: null,
+      reqIsOn: {
+        check: false
+      },
       showing: true,
-      dialog: { dialog: false },
+      dialog: {
+        dialog: false,
+        reqIsOn: false,
+        reqId: ''
+      },
       headers: [
         {
           text: 'Request Date',

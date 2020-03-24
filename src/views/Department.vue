@@ -7,12 +7,12 @@
             </v-col>
         </v-row>
       <v-row>
-        <v-col>
+        <v-col >
           <v-data-table
           v-if="desserts.length > 0"
             :headers="headers"
             :items="desserts"
-            class="elevation-0"
+            class="elevation-0 animated fadeIn"
           >
             <template v-slot:item.name="{ item }">
               <span class="nunito fs_18">{{ item.name }}</span>
