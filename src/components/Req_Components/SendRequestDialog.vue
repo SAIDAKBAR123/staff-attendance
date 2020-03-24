@@ -44,6 +44,7 @@
 
 <script>
 import Post from '../../services/Post'
+// import moduleName from '../../services';
 // import Delete from '../../services/Delete'
 export default {
   props: {
@@ -67,6 +68,12 @@ export default {
     }
   },
   methods: {
+    //  getData () {
+    //   Get.getRequests().then(data => {
+    //     console.log(data)
+    //     this.desserts = data
+    //   }).catch(error => console.log(error))
+    // },
     sendRequest () {
       const now = new Date()
       const hours = this.datePick.split(':')[0]

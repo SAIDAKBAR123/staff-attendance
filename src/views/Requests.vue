@@ -85,7 +85,7 @@
               >
                 {{ item.isActive == 1 ? "On process" : "finished" }}
               </v-progress-linear> -->
-              <v-chip  :color="item.isActive == 1 ? 'success' : 'orange lighten-4'">{{ item.isActive == 1 ? "On process" : "finished" }}</v-chip>
+              <v-chip  :color="inProcess(item.endTime) ? 'success' : 'orange lighten-4'">{{ inProcess(item.endTime) ? "On process" : "finished" }}</v-chip>
             </template>
                  <template v-slot:item.responses="{item}">
               <v-btn @click="dialogOpen(item)" rounded color="primary" outlined dark
@@ -121,15 +121,19 @@ export default {
     SendRequestDialog,
     ResponseUsersDialog
   },
-  watch: {
-    // loading2 (val) {
-    //   this.snackbar = true
-    //   setTimeout(() => {
-    //     this.snackbar = false
-    //   }, 3000)
-    // }
-  },
   methods: {
+    inProcess (date) {
+      return (new Date(date)).getTime() > (new Date()).getTime()
+      // const fixedHour = new Date(date).getHours()
+      // const fixedMin = new Date(date).getMinutes()
+      // const currentHour = new Date().getHours()
+      // const currentMin = new Date().getMinutes()
+      // if ( fixedHour > currentHour && fixedMin > currentMin)
+      // return true
+      // else if (fixedHour == currentMin && fixedMin < )
+      // console.log(time1, time2)
+      // return time1 > time2
+    },
     stopAttendance  () {
       console.log(this.dialog)
       Delete.deleteReq(this.dialog.reqId).then(res => {
@@ -144,7 +148,6 @@ export default {
     },
     getData () {
       Get.getRequests().then(data => {
-        console.log(data)
         this.desserts = data
       }).catch(error => console.log(error))
     },
