@@ -6,7 +6,7 @@
              <p class="montserrat-default fs_30">Requests and Reports</p>
           </v-col>
             <v-col v-if="desserts.length > 0" cols="12">
-            <v-btn tile text color="blue" :href="`${base}responses/getExcel`"><v-icon left>mdi-download</v-icon> get Excel</v-btn>
+            <v-btn tile text color="blue" :href="`${base}responses?format=excel`"><v-icon left>mdi-download</v-icon> get Excel</v-btn>
           </v-col>
         </v-row>
         <v-row v-if="desserts.length > 0" no-gutters>
