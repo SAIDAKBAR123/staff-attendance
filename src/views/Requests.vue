@@ -15,81 +15,46 @@
         <v-col cols="auto">
           <v-btn
             tile
-            :disabled="this.dialog.reqIsOn"
+            :disabled="dialog.reqIsOn"
             @click="openReqDialog"
             color="primary"
           >
             Send Request</v-btn
           >
         </v-col>
-        <v-col v-if="false" cols="12">
-          <transition
-            name="custom-classes-transition"
-            enter-active-class="animated fadeInLeftBig"
-            leave-active-class="animated bounceOutRight"
-          >
-            <v-alert
-              v-if="dialog.reqIsOn"
-              outlined
-              color="deep-orange"
-              dense
-              icon="mdi-clock-fast"
-              prominent
-            >
-              <v-row align="center">
-                <v-col class="grow">
-                  Taking attendance has started successfully. You can stop it
-                  any time via Stop button.</v-col
-                >
-                <v-col class="shrink">
-                  <v-btn
-                    dark
-                    @click="stopAttendance"
-                    tile
-                    color="red lighten-1"
-                    >STOP</v-btn
-                  >
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <v-progress-linear
-                    indeterminate
-                    color="deep-orange"
-                  ></v-progress-linear>
-                </v-col>
-              </v-row>
-            </v-alert>
-          </transition>
-        </v-col>
       </v-row>
       <v-row no-gutters>
-        <v-col  v-if="desserts.length > 0">
+        <v-col v-if="dialog.desserts.length > 0">
           <v-data-table
             :headers="headers"
-            :items="desserts"
+            :items="dialog.desserts"
             class="elevation-0 animated fadeIn"
           >
             <template v-slot:item.time="{ item }">
-              <span>{{ item.startTime | moment("MMM D, YYYY") }}</span>
+               <span>{{ getStartTime(item.startTime) }}</span>
             </template>
             <template v-slot:item.times="{ item }">
-              <span>{{ item.endTime | moment("dddd , LT") }}</span>
+              <span>{{ getEndTime(item.endTime) }}</span>
             </template>
             <template v-slot:item.isActive="{ item }">
-              <!-- <v-progress-linear
-                :color="item.isActive == 1 ? 'success' : 'grey'"
-                :value="item.responses.length"
-                stream
-                height="20"
+              <v-chip
+                :color="
+                  inProcess(item.endTime) ? 'success' : 'orange lighten-4'
+                "
+                >{{
+                  inProcess(item.endTime) ? "On process" : "finished"
+                }}</v-chip
               >
-                {{ item.isActive == 1 ? "On process" : "finished" }}
-              </v-progress-linear> -->
-              <v-chip  :color="inProcess(item.endTime) ? 'success' : 'orange lighten-4'">{{ inProcess(item.endTime) ? "On process" : "finished" }}</v-chip>
             </template>
-                 <template v-slot:item.responses="{item}">
-              <v-btn @click="dialogOpen(item)" rounded color="primary" outlined dark
-                ><v-icon size="20" left>mdi-eye</v-icon> view</v-btn>
+            <template v-slot:item.responses="{ item }">
+              <v-btn
+                @click="dialogOpen(item)"
+                rounded
+                color="primary"
+                outlined
+                dark
+                ><v-icon size="20" left>mdi-eye</v-icon> view</v-btn
+              >
             </template>
           </v-data-table>
         </v-col>
@@ -98,10 +63,10 @@
         </v-col>
       </v-row>
       <!--dialog box -->
-        <send-request-dialog :dialog="dialog"  />
+      <send-request-dialog :dialog="dialog" />
 
       <!-- dialog for userlist -->
-     <response-users-dialog :userList="userList" />
+      <response-users-dialog :userList="userList" />
     </v-container>
   </div>
   <!-- <transition
@@ -115,41 +80,28 @@
 import Get from '../services/Get'
 import SendRequestDialog from '../components/Req_Components/SendRequestDialog'
 import ResponseUsersDialog from '../components/Req_Components/ResonseUsersDialog'
-import Delete from '../services/Delete'
+
 export default {
   components: {
     SendRequestDialog,
     ResponseUsersDialog
   },
   methods: {
-    inProcess (date) {
-      return (new Date(date)).getTime() > (new Date()).getTime()
-      // const fixedHour = new Date(date).getHours()
-      // const fixedMin = new Date(date).getMinutes()
-      // const currentHour = new Date().getHours()
-      // const currentMin = new Date().getMinutes()
-      // if ( fixedHour > currentHour && fixedMin > currentMin)
-      // return true
-      // else if (fixedHour == currentMin && fixedMin < )
-      // console.log(time1, time2)
-      // return time1 > time2
+    getStartTime (date) {
+      return this.$moment(date).format('MMM D, YYYY')
     },
-    stopAttendance  () {
-      console.log(this.dialog)
-      Delete.deleteReq(this.dialog.reqId).then(res => {
-        console.log(res)
-        this.dialog.reqIsOn = false
-        this.$notify({
-          type: 'warn',
-          text: 'Successfully cancelled',
-          title: res
-        })
-      })
+    getEndTime (date) {
+      return this.$moment(date).format('dddd , LT')
+    },
+    inProcess (date) {
+      return new Date(date).getTime() > new Date().getTime()
     },
     getData () {
-      Get.getRequests().then(data => {
-        this.desserts = data
-      }).catch(error => console.log(error))
+      Get.getRequests()
+        .then(data => {
+          this.dialog.desserts = data
+        })
+        .catch(error => console.log(error))
     },
     dialogOpen (item) {
       this.userList = {
@@ -175,7 +127,8 @@ export default {
       dialog: {
         dialog: false,
         reqIsOn: false,
-        reqId: ''
+        reqId: '',
+        desserts: []
       },
       headers: [
         {

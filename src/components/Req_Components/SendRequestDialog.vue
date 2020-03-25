@@ -44,7 +44,7 @@
 
 <script>
 import Post from '../../services/Post'
-// import moduleName from '../../services';
+import Get from '../../services/Get'
 // import Delete from '../../services/Delete'
 export default {
   props: {
@@ -62,26 +62,22 @@ export default {
   computed: {
     minHours () {
       const time = new Date()
-      const ap = time.getHours() + ':' + time.getMinutes()
-      console.log(ap)
-      return ap
+      return time.getHours() + ':' + time.getMinutes()
     }
   },
   methods: {
-    //  getData () {
-    //   Get.getRequests().then(data => {
-    //     console.log(data)
-    //     this.desserts = data
-    //   }).catch(error => console.log(error))
-    // },
+    getData () {
+      Get.getRequests().then(data => {
+        this.dialog.desserts = data
+      }).catch(error => console.log(error))
+    },
     sendRequest () {
       const now = new Date()
       const hours = this.datePick.split(':')[0]
       const minutes = this.datePick.split(':')[1]
       const timestamps = (new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0)).getTime()
-      console.log(timestamps)
       Post.sentRequest({ endTime: timestamps }).then(res => {
-        console.log(res)
+        this.getData()
         this.dialog.dialog = false
         this.dialog.reqIsOn = true
         this.dialog.reqId = res.id

@@ -9,9 +9,21 @@
             <v-btn tile text color="blue" :href="`${base}responses?format=excel`"><v-icon left>mdi-download</v-icon> get Excel</v-btn>
           </v-col>
         </v-row>
-        <v-row v-if="desserts.length > 0" no-gutters>
-          <v-col>
+        <v-row justify="end" v-if="desserts.length > 0" no-gutters>
+        <v-col cols="12">
+            <v-card class="py-2" tile flat color="transparent" >
+              <v-text-field
+        v-model="search"
+        append-icon="mdi-account-search-outline"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+          </v-card>
+        </v-col>
+          <v-col cols="12">
              <v-data-table
+             :search="search"
             :headers="headers"
             :items="desserts"
             class="elevation-0 animated fadeIn"
@@ -75,6 +87,7 @@ export default {
     return {
       base: process.env.VUE_APP_BASE_URL,
       snackbar: false,
+      search: '',
       obj: {
         staff: {
           name: ''
@@ -100,8 +113,6 @@ export default {
     }
   },
   created () {
-    // const base = process.env.socPath
-    // console.log(base)
     this.getData()
     this.socket = io('https://iutattendance.herokuapp.com')
   },

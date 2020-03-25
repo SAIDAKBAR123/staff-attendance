@@ -43,7 +43,6 @@ export default {
   methods: {
     getData () {
       Get.getDepartments().then(data => {
-      //  console.log(data)
         this.desserts = data
       }).catch(error => console.log(error))
     },
@@ -53,7 +52,6 @@ export default {
         ...item,
         dialog: this.dialog
       }
-      console.log(item)
     }
   },
   data () {

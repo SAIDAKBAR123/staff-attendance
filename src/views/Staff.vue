@@ -67,17 +67,8 @@ export default {
   methods: {
     getData () {
       Get.getStaff().then(data => {
-        console.log(data)
         this.desserts = data
-      })
-    },
-    getColor (calories) {
-      const num = Math.floor(Math.random() * 1000)
-
-      console.log(num)
-      this.$vuetify.theme.dark = true
-      if (calories > 400) return 'red'
-      else if (calories > 200) return 'orange'
+      }).catch(err => console.log(err))
     }
   },
   created () {
