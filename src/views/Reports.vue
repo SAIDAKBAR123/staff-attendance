@@ -93,7 +93,7 @@ export default {
           name: ''
         }
       },
-      socket: {},
+      socket: io(process.env.VUE_APP_VARUABLE),
       dummy: '',
       headers: [
         {
@@ -114,7 +114,6 @@ export default {
   },
   created () {
     this.getData()
-    this.socket = io('https://iutattendance.herokuapp.com')
   },
   mounted () {
     this.socket.on('newResponse', data => {
